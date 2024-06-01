@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:37:44 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 15:20:16 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 15:24:04 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,8 @@ char	*divide_string(char **store)
 	if (nl != -1)
 		new_store = ft_strdup_gnl(&(*store)[nl + 1]);
 	free(*store);
-	if (nl == -1)
-		*store = NULL;
-	else
+	*store = NULL;
+	if (nl != -1)
 		*store = new_store;
 	return (output);
 }
