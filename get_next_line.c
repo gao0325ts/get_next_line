@@ -6,13 +6,13 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:50:30 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 12:30:32 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:36:51 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	find_nl(char *str)
+ssize_t	find_nl(char *str)
 {
 	int	i;
 
@@ -29,8 +29,8 @@ int	find_nl(char *str)
 char	*join_read(char *s1, char *s2)
 {
 	char	*res;
-	int		len1;
-	int		len2;
+	size_t	len1;
+	size_t	len2;
 
 	len1 = ft_strlen_gnl(s1);
 	len2 = ft_strlen_gnl(s2);
@@ -52,8 +52,8 @@ char	*divide_string(char **store)
 {
 	char	*output;
 	char	*new_store;
-	int		nl;
-	int		len;
+	ssize_t	nl;
+	size_t	len;
 
 	nl = find_nl(*store);
 	if (nl == -1)
@@ -81,8 +81,8 @@ char	*get_next_line(int fd)
 	char		*buf;
 	ssize_t		bytes;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (free(store), store = NULL, NULL);
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
 		return (NULL);
@@ -97,10 +97,9 @@ char	*get_next_line(int fd)
 			break ;
 	}
 	free(buf);
-	if (bytes < 0 || (bytes == 0 && (!store || !*store)))
+	if (bytes < 0 || !store || !*store)
 		return (free(store), store = NULL, NULL);
 	return (divide_string(&store));
 }
 
-// TODO size_tで返ってきたlenをintで渡しているところ修正
 // TODO divide_string : str?cpyにまとめる→strlcpy?

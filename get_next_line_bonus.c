@@ -6,13 +6,13 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:37:44 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 12:30:56 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:37:17 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-int	find_nl(char *str)
+ssize_t	find_nl(char *str)
 {
 	int	i;
 
@@ -52,8 +52,8 @@ char	*divide_string(char **store)
 {
 	char	*output;
 	char	*new_store;
-	int		nl;
-	int		len;
+	ssize_t	nl;
+	size_t	len;
 
 	nl = find_nl(*store);
 	if (nl == -1)
@@ -81,10 +81,8 @@ char	*get_next_line(int fd)
 	char		*buf;
 	ssize_t		bytes;
 
-	if (fd < 0 || fd > OPEN_MAX)
+	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (free(store[fd]), store[fd] = NULL, NULL);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
 		return (NULL);
@@ -99,7 +97,7 @@ char	*get_next_line(int fd)
 			break ;
 	}
 	free(buf);
-	if (bytes < 0 || (bytes == 0 && (!store[fd] || !*store[fd])))
+	if (bytes < 0 || !store[fd] || !*store[fd])
 		return (free(store[fd]), store[fd] = NULL, NULL);
 	return (divide_string(&store[fd]));
 }
