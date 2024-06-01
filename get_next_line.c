@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:50:30 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 09:09:25 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 11:31:55 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*divide_string(char **store)
 	char	*output;
 	char	*new_store;
 	int		nl;
-	int		len;
+	int		len; // TODO これ使わないように変える
 
 	nl = find_nl(*store);
 	if (nl == -1)
@@ -64,7 +64,7 @@ char	*divide_string(char **store)
 	if (!output)
 		return (NULL);
 	ft_strncpy_gnl(output, *store, len + 1);
-	output[len + 1] = '\0'; // TODO str?cpyにまとめる
+	output[len + 1] = '\0'; // TODO str?cpyにまとめる→strlcpy?
 	if (nl == -1)
 	{
 		free(*store);
@@ -86,7 +86,7 @@ char	*get_next_line(int fd)
 	ssize_t		bytes;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (NULL);
+		return (free(store), store = NULL, NULL);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
 		return (NULL);
@@ -102,11 +102,7 @@ char	*get_next_line(int fd)
 	}
 	free(buf);
 	if (bytes < 0 || (bytes == 0 && (!store || !*store)))
-	{
-		free(store);
-		store = NULL;
-		return (NULL);
-	}
+		return (free(store), store = NULL, NULL);
 	return (divide_string(&store));
 }
 
