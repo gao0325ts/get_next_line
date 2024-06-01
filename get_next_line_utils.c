@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:53:15 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 15:37:41 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 16:02:40 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	ft_strlen_gnl(char *s)
 {
-	ssize_t	len;
+	size_t	len;
 
 	len = 0;
 	while (s && s[len])
