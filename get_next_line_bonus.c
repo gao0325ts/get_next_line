@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 18:50:30 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 12:11:32 by stakada          ###   ########.fr       */
+/*   Created: 2024/06/01 11:37:44 by stakada           #+#    #+#             */
+/*   Updated: 2024/06/01 12:28:14 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	find_nl(char *str)
 {
@@ -53,8 +53,8 @@ char	*divide_string(char **store)
 	char	*output;
 	char	*new_store;
 	int		nl;
+	int     len;
 
-	int len; // TODO これ使わないように変える？
 	nl = find_nl(*store);
 	if (nl == -1)
 		len = ft_strlen_gnl(*store);
@@ -65,28 +65,26 @@ char	*divide_string(char **store)
 		return (NULL);
 	ft_strncpy_gnl(output, *store, len + 1);
 	output[len + 1] = '\0'; // TODO str?cpyにまとめる→strlcpy?
-	if (nl == -1)
-	{
-		free(*store);
-		*store = NULL;
-	}
-	else
-	{
-		new_store = ft_strdup_gnl(*store + nl + 1);
-		free(*store);
-		*store = new_store;
-	}
+    if (nl != -1)
+        new_store = ft_strdup_gnl(*store + nl + 1);
+    free(*store);
+    if (nl == -1)
+        *store = NULL;
+    else
+        *store = new_store;
 	return (output);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*store;
+	static char	*store[OPEN_MAX];
 	char		*buf;
 	ssize_t		bytes;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (free(store), store = NULL, NULL);
+    if (fd < 0 || fd > OPEN_MAX)
+        return (NULL);
+	if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+		return (free(store[fd]), store[fd] = NULL, NULL);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
 		return (NULL);
@@ -96,14 +94,12 @@ char	*get_next_line(int fd)
 		if (bytes <= 0)
 			break ;
 		buf[bytes] = '\0';
-		store = join_read(store, buf);
-		if (find_nl(store) >= 0)
+		store[fd] = join_read(store[fd], buf);
+		if (find_nl(store[fd]) >= 0)
 			break ;
 	}
 	free(buf);
-	if (bytes < 0 || (bytes == 0 && (!store || !*store)))
-		return (free(store), store = NULL, NULL);
-	return (divide_string(&store));
+	if (bytes < 0 || (bytes == 0 && (!store[fd] || !*store[fd])))
+		return (free(store[fd]), store[fd] = NULL, NULL);
+	return (divide_string(&store[fd]));
 }
-
-// TODO size_tで返ってきたlenをintで渡しているところ修正
