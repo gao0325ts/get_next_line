@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:37:44 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 15:42:45 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 17:17:46 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 ssize_t	find_nl(char *str)
 {
-	int	i;
+	ssize_t	i;
 
 	i = 0;
 	while (str[i])
