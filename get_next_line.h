@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:50:50 by stakada           #+#    #+#             */
-/*   Updated: 2024/05/26 18:08:04 by stakada          ###   ########.fr       */
+/*   Updated: 2024/05/31 20:32:13 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@
 
 // TODO 提出前に更新
 char	*get_next_line(int fd);
-char	*divide_string(char **s_str);
-size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin_gnl(char *s1, char *s2, ssize_t s2_len);
-char	*ft_substr_gnl(char *s, size_t len);
-char	*ft_strdup(const char *s1);
+int		find_nl(char *str);
+char	*join_read(char *s1, char *s2);
+char	*divide_string(char **store);
+size_t	ft_strlen_gnl(const char *s);
+void	ft_strcpy_gnl(char *dst, char *src);
+void	ft_strncpy_gnl(char *dst, char *src, int n);
+char	*ft_strdup_gnl(char *src);
 
 #endif

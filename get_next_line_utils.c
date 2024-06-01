@@ -6,85 +6,45 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:53:15 by stakada           #+#    #+#             */
-/*   Updated: 2024/05/26 17:22:09 by stakada          ###   ########.fr       */
+/*   Updated: 2024/05/31 20:31:13 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen_gnl(const char *s)
 {
 	size_t	len;
 
 	len = 0;
-	if (!s)
-		return (0);
-	while (s[len])
+	while (s && s[len])
 		len++;
 	return (len);
 }
 
-char	*ft_strchr(const char *s, int c)
+void	ft_strcpy_gnl(char *dst, char *src)
 {
-	while (*s)
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
-	}
-	if ((char)c == '\0')
-		return ((char *)s);
-	return (NULL);
+	while (*src)
+		*dst++ = *src++;
+	*dst = '\0';
 }
 
-char	*ft_strjoin_gnl(char *s1, char *s2, ssize_t s2_len)
+void	ft_strncpy_gnl(char *dst, char *src, int n)
 {
-	char	*res;
-	char	*start;
-	ssize_t	len;
-
-	len = s2_len;
-	if (s1)
-		len += ft_strlen(s1);
-	res = (char *)malloc(sizeof(char) * (len + 1));
-	if (!res)
-		return (NULL);
-	start = res;
-	while (s1 && *s1)
-		*res++ = *s1++;
-	while (*s2)
-		*res++ = *s2++;
-	*res = '\0';
-	return (start);
+	while (n-- && *src)
+		*dst++ = *src++;
+	if (n >= 0)
+		*dst = '\0';
 }
 
-char	*ft_substr_gnl(char *s, size_t len)
+char	*ft_strdup_gnl(char *src)
 {
-	char	*res;
-	char	*res_start;
+	char	*dst;
+	int		len;
 
-	res = (char *)malloc(sizeof(char) * (len + 2));
-	if (!res)
-		return (NULL);
-	res_start = res;
-	while (*s && *s != '\n')
-		*res++ = *s++;
-	*res++ = '\n';
-	*res = '\0';
-	return (res_start);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	char *start;
-	char *new_str;
-
-	new_str = (char *)malloc(ft_strlen(s1) + 1);
-	if (!new_str)
-		return (NULL);
-	start = new_str;
-	while (*s1)
-		*new_str++ = *s1++;
-	*new_str = '\0';
-	return (start);
+	len = ft_strlen_gnl(src);
+	dst = (char *)malloc(sizeof(char) * (len + 1));
+	if (dst)
+		ft_strcpy_gnl(dst, src);
+	return (dst);
 }

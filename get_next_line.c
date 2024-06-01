@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:50:30 by stakada           #+#    #+#             */
-/*   Updated: 2024/05/26 19:04:12 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 09:09:25 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,131 +20,96 @@ int	find_nl(char *str)
 	while (str[i])
 	{
 		if (str[i] == '\n')
-			return (1);
+			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
-char	*join_read(char *s1, char *s2, ssize_t s2_len)
+char	*join_read(char *s1, char *s2)
 {
 	char	*res;
-	char	*res_start;
-    ssize_t	len;
+	int		len1;
+	int		len2;
 
-	// res = NULL;
-    len = s2_len + 1;
-    if (s1)
-        len += ft_strlen(s1);
-	res = (char *)malloc(sizeof(char) * len);
-	res_start = res;
-	while (s1 && *s1)
-		*res++ = *s1++;
-	while (*s2)
-		*res++ = *s2++;
-	*res = '\0';
-	return (res_start);
+	len1 = ft_strlen_gnl(s1);
+	len2 = ft_strlen_gnl(s2);
+	res = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	if (!res)
+		return (NULL);
+	if (s1)
+	{
+		ft_strcpy_gnl(res, s1);
+		free(s1);
+	}
+	if (s2)
+		ft_strcpy_gnl(res + len1, s2);
+	res[len1 + len2] = '\0';
+	return (res);
 }
 
-char	*output_str(char *readstr)
+char	*divide_string(char **store)
 {
 	char	*output;
-	int		i;
+	char	*new_store;
+	int		nl;
+	int		len;
 
-	i = 0;
-	if (!readstr)
-		return (NULL);
-    while (readstr[i] && readstr[i] != '\n')
-        i++;
-	output = (char *)malloc(sizeof(char) * (ft_strlen(readstr) + 2));
+	nl = find_nl(*store);
+	if (nl == -1)
+		len = ft_strlen_gnl(*store);
+	else
+		len = nl;
+	output = (char *)malloc(sizeof(char) * (len + 2));
 	if (!output)
-	{
-		free(output);
 		return (NULL);
+	ft_strncpy_gnl(output, *store, len + 1);
+	output[len + 1] = '\0'; // TODO str?cpyにまとめる
+	if (nl == -1)
+	{
+		free(*store);
+		*store = NULL;
 	}
-    
-	output[i] = '\0';
+	else
+	{
+		new_store = ft_strdup_gnl(*store + nl + 1);
+		free(*store);
+		*store = new_store;
+	}
 	return (output);
-}
-
-char	*substr_gnl(char *str, int nl)
-{
-	char	*res;
-	int		i;
-
-	// char *start;
-	i = 0;
-	if (!str || nl <= 0)
-		return (NULL);
-	res = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!res)
-	{
-		free(res);
-		return (NULL);
-	}
-	// start = res;
-	while (str[nl + i + 1])
-	{
-		res[i] = str[nl + i + 1];
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
 }
 
 char	*get_next_line(int fd)
 {
-	static char *store;
-	char *buf = NULL;
-	char *readstr = NULL;
-	char *line = NULL;
-	// int nl = 0;
-	ssize_t len = 0;
+	static char	*store;
+	char		*buf;
+	ssize_t		bytes;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	if (store)
-	{
-		readstr = ft_strdup(store);
-		free(store);
-	}
-	buf = (char *)malloc(sizeof(char) * BUFFER_SIZE);
+	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
-	{
-		free(buf);
 		return (NULL);
-	}
 	while (1)
 	{
-		len = read(fd, buf, BUFFER_SIZE);
-		// buf[BUFFER_SIZE] = '\0';
-		if (len == -1)
-		{
-			free(buf);
-			return (NULL);
-		}
-		if (len == 0)
+		bytes = read(fd, buf, BUFFER_SIZE);
+		if (bytes <= 0)
 			break ;
-		readstr = join_read(readstr, buf, len);
-		if (!readstr)
-		{
-			free(readstr);
-			return (NULL);
-		}
-		// nl = find_nl(readstr);
-		// if (nl >= 0)
-		// 	break ;
-        if (find_nl(readstr))
-            break ;
+		buf[bytes] = '\0';
+		store = join_read(store, buf);
+		if (find_nl(store) >= 0)
+			break ;
 	}
 	free(buf);
-	if (len == 0 && !readstr)
+	if (bytes < 0 || (bytes == 0 && (!store || !*store)))
 	{
-		free(readstr);
+		free(store);
+		store = NULL;
 		return (NULL);
 	}
-	line = output_str(readstr);
-	store = substr_gnl(readstr);
-	free(readstr);
-	return (line);
+	return (divide_string(&store));
 }
+
+// CHECK インデックス位置が正しいか
+// CHECK NULLが入っている時の処理が正しいか
+// TODO 読み込むものがないときNULLが返るようにする
