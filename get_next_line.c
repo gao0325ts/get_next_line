@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:50:30 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 15:37:10 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 15:42:22 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,24 @@ ssize_t	find_nl(char *str)
 	return (-1);
 }
 
-char	*join_read(char *s1, char *s2)
+char	*join_read(char *store, char *buf)
 {
 	char	*res;
-	size_t	len1;
-	size_t	len2;
+	size_t	store_len;
+	size_t	buf_len;
 
-	len1 = ft_strlen_gnl(s1);
-	len2 = ft_strlen_gnl(s2);
-	res = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	store_len = ft_strlen_gnl(store);
+	buf_len = ft_strlen_gnl(buf);
+	res = (char *)malloc(sizeof(char) * (store_len + buf_len + 1));
 	if (!res)
 		return (NULL);
-	if (s1)
+	if (store)
 	{
-		ft_strcpy_gnl(res, s1);
-		free(s1);
+		ft_strcpy_gnl(res, store);
+		free(store);
 	}
-	if (s2)
-		ft_strcpy_gnl(&res[len1], s2);
+	if (buf)
+		ft_strcpy_gnl(&res[store_len], buf);
 	return (res);
 }
 

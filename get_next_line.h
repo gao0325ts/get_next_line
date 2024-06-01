@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:50:50 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 15:37:23 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 15:42:32 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 char	*get_next_line(int fd);
 ssize_t	find_nl(char *str);
-char	*join_read(char *s1, char *s2);
+char	*join_read(char *store, char *buf);
 char	*divide_string(char **store);
 size_t	ft_strlen_gnl(char *s);
 void	ft_strcpy_gnl(char *dst, char *src);
