@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:37:44 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 15:24:04 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 15:37:59 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ ssize_t	find_nl(char *str)
 
 char	*join_read(char *s1, char *s2)
 {
-	char	*res;
-	int		len1;
-	int		len2;
+	char		*res;
+	size_t		len1;
+	size_t		len2;
 
 	len1 = ft_strlen_gnl(s1);
 	len2 = ft_strlen_gnl(s2);
