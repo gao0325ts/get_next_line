@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:38:35 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 14:41:04 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 15:17:37 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 #  define OPEN_MAX 256
 # endif
 
-// TODO 提出前に更新
 char	*get_next_line(int fd);
 ssize_t	find_nl(char *str);
 char	*join_read(char *s1, char *s2);

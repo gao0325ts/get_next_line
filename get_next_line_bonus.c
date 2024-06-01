@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:37:44 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 14:39:30 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 15:20:16 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ char	*join_read(char *s1, char *s2)
 		free(s1);
 	}
 	if (s2)
-		ft_strcpy_gnl(res + len1, s2);
-	res[len1 + len2] = '\0';
+		ft_strcpy_gnl(&res[len1], s2);
 	return (res);
 }
 
@@ -59,14 +58,13 @@ char	*divide_string(char **store)
 	if (nl == -1)
 		len = ft_strlen_gnl(*store);
 	else
-		len = nl;
-	output = (char *)malloc(sizeof(char) * (len + 2));
+		len = nl + 1;
+	output = (char *)malloc(sizeof(char) * (len + 1));
 	if (!output)
 		return (NULL);
-	ft_strncpy_gnl(output, *store, len + 1);
-	output[len + 1] = '\0';
+	ft_strncpy_gnl(output, *store, len);
 	if (nl != -1)
-		new_store = ft_strdup_gnl(*store + nl + 1);
+		new_store = ft_strdup_gnl(&(*store)[nl + 1]);
 	free(*store);
 	if (nl == -1)
 		*store = NULL;
@@ -101,5 +99,3 @@ char	*get_next_line(int fd)
 		return (free(store[fd]), store[fd] = NULL, NULL);
 	return (divide_string(&store[fd]));
 }
-
-// TODO divide_string : str?cpyにまとめる→strlcpy?

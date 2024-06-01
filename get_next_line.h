@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:50:50 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 14:40:19 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 15:17:40 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #  define BUFFER_SIZE 42
 # endif
 
-// TODO 提出前に更新
 char	*get_next_line(int fd);
 ssize_t	find_nl(char *str);
 char	*join_read(char *s1, char *s2);

@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 12:09:49 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 14:40:59 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 15:03:59 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ void	ft_strncpy_gnl(char *dst, char *src, size_t n)
 {
 	while (n-- && *src)
 		*dst++ = *src++;
-	if (n >= 0)
-		*dst = '\0';
+	*dst = '\0';
 }
 
 char	*ft_strdup_gnl(char *src)
