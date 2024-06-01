@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:37:44 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 14:37:17 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:39:30 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,4 @@ char	*get_next_line(int fd)
 	return (divide_string(&store[fd]));
 }
 
-// TODO size_tで返ってきたlenをintで渡しているところ修正
 // TODO divide_string : str?cpyにまとめる→strlcpy?

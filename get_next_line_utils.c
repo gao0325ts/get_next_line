@@ -6,13 +6,13 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:53:15 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 14:31:53 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:40:46 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen_gnl(const char *s)
+size_t	ft_strlen_gnl(char *s)
 {
 	size_t	len;
 
