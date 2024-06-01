@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 11:37:44 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 12:28:14 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 12:30:56 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*divide_string(char **store)
 	char	*output;
 	char	*new_store;
 	int		nl;
-	int     len;
+	int		len;
 
 	nl = find_nl(*store);
 	if (nl == -1)
@@ -64,14 +64,14 @@ char	*divide_string(char **store)
 	if (!output)
 		return (NULL);
 	ft_strncpy_gnl(output, *store, len + 1);
-	output[len + 1] = '\0'; // TODO str?cpyにまとめる→strlcpy?
-    if (nl != -1)
-        new_store = ft_strdup_gnl(*store + nl + 1);
-    free(*store);
-    if (nl == -1)
-        *store = NULL;
-    else
-        *store = new_store;
+	output[len + 1] = '\0';
+	if (nl != -1)
+		new_store = ft_strdup_gnl(*store + nl + 1);
+	free(*store);
+	if (nl == -1)
+		*store = NULL;
+	else
+		*store = new_store;
 	return (output);
 }
 
@@ -81,8 +81,8 @@ char	*get_next_line(int fd)
 	char		*buf;
 	ssize_t		bytes;
 
-    if (fd < 0 || fd > OPEN_MAX)
-        return (NULL);
+	if (fd < 0 || fd > OPEN_MAX)
+		return (NULL);
 	if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (free(store[fd]), store[fd] = NULL, NULL);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
@@ -103,3 +103,6 @@ char	*get_next_line(int fd)
 		return (free(store[fd]), store[fd] = NULL, NULL);
 	return (divide_string(&store[fd]));
 }
+
+// TODO size_tで返ってきたlenをintで渡しているところ修正
+// TODO divide_string : str?cpyにまとめる→strlcpy?

@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:50:30 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 12:11:32 by stakada          ###   ########.fr       */
+/*   Updated: 2024/06/01 12:30:32 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ char	*divide_string(char **store)
 	char	*output;
 	char	*new_store;
 	int		nl;
+	int		len;
 
-	int len; // TODO これ使わないように変える？
 	nl = find_nl(*store);
 	if (nl == -1)
 		len = ft_strlen_gnl(*store);
@@ -64,18 +64,14 @@ char	*divide_string(char **store)
 	if (!output)
 		return (NULL);
 	ft_strncpy_gnl(output, *store, len + 1);
-	output[len + 1] = '\0'; // TODO str?cpyにまとめる→strlcpy?
-	if (nl == -1)
-	{
-		free(*store);
-		*store = NULL;
-	}
-	else
-	{
+	output[len + 1] = '\0';
+	if (nl != -1)
 		new_store = ft_strdup_gnl(*store + nl + 1);
-		free(*store);
+	free(*store);
+	if (nl == -1)
+		*store = NULL;
+	else
 		*store = new_store;
-	}
 	return (output);
 }
 
@@ -107,3 +103,4 @@ char	*get_next_line(int fd)
 }
 
 // TODO size_tで返ってきたlenをintで渡しているところ修正
+// TODO divide_string : str?cpyにまとめる→strlcpy?

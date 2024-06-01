@@ -14,7 +14,7 @@
 
 size_t	ft_strlen_gnl(const char *s)
 {
-	size_t  len;
+	size_t	len;
 
 	len = 0;
 	while (s && s[len])
@@ -39,8 +39,8 @@ void	ft_strncpy_gnl(char *dst, char *src, int n)
 
 char	*ft_strdup_gnl(char *src)
 {
-	char    *dst;
-	int     len;
+	char	*dst;
+	int		len;
 
 	len = ft_strlen_gnl(src);
 	dst = (char *)malloc(sizeof(char) * (len + 1));
