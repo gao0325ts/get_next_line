@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:21:58 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 20:49:26 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/15 21:16:15 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static char	*read_and_store(int fd, char *store)
 		if (bytes < 0)
 		{
 			free(buf);
+			free(store);
 			return (NULL);
 		}
 		buf[bytes] = '\0';

@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:28:29 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 20:54:09 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/15 21:22:35 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static char	*read_and_store(int fd, char *store)
 		if (bytes < 0)
 		{
 			free(buf);
+			free(store);
 			return (NULL);
 		}
 		buf[bytes] = '\0';
@@ -114,6 +115,32 @@ static t_list	*find_current_fd(t_list **lst, int fd)
 	return (new);
 }
 
+void	free_current_fd(t_list **lst, int fd)
+{
+	t_list	*current;
+	t_list	*prev;
+
+	if (!lst || !*lst)
+		return ;
+	current = *lst;
+	prev = NULL;
+	while (current)
+	{
+		if (current->fd == fd)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				*lst = current->next;
+			free(current->store);
+			free(current);
+			return ;
+		}
+		prev = current;
+		current = current->next;
+	}
+}
+
 char	*get_next_line(int fd)
 {
 	static t_list	*lst;
@@ -127,8 +154,13 @@ char	*get_next_line(int fd)
 		return (NULL);
 	current->store = read_and_store(fd, current->store);
 	if (!current->store)
+	{
+		free_current_fd(&lst, fd);
 		return (NULL);
+	}
 	line = get_line(current->store);
 	current->store = get_remain_str(current->store);
+	if (!current->store)
+		free_current_fd(&lst, fd);
 	return (line);
 }
