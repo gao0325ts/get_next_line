@@ -6,66 +6,66 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:28:29 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 21:25:39 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/15 21:31:47 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-static char	*get_line(char *s)
+static char	*extract_line(char *str)
 {
 	char	*line;
 	int		len;
 	int		i;
 
 	len = 0;
-	while (s[len] && s[len] != '\n')
+	while (str[len] && str[len] != '\n')
 		len++;
-	if (!s[len])
-		return (ft_strdup(s));
+	if (!str[len])
+		return (ft_strdup(str));
 	line = (char *)malloc(sizeof(char) * (len + 2));
 	if (!line)
 		return (NULL);
 	i = 0;
 	while (i <= len)
 	{
-		line[i] = s[i];
+		line[i] = str[i];
 		i++;
 	}
 	line[i] = '\0';
 	return (line);
 }
 
-static char	*get_remain_str(char *s)
+static char	*save_ramaining_str(char *str)
 {
 	char	*new;
 	size_t	i;
 	size_t	j;
 
 	i = 0;
-	while (s[i] && s[i] != '\n')
+	while (str[i] && str[i] != '\n')
 		i++;
-	if (!s[i] || (s[i] == '\n' && !s[i + 1]))
+	if (!str[i] || (str[i] == '\n' && !str[i + 1]))
 	{
-		free(s);
+		free(str);
 		return (NULL);
 	}
-	new = (char *)malloc(sizeof(char) * (ft_strlen(s) - i + 1));
+	new = (char *)malloc(sizeof(char) * (ft_strlen(str) - i + 1));
 	if (!new)
 		return (NULL);
 	j = 0;
-	while (s[i + 1])
+	while (str[i + 1])
 	{
-		new[j] = s[i + 1];
+		new[j] = str[i + 1];
 		i++;
 		j++;
 	}
 	new[j] = '\0';
-	free(s);
+	free(str);
 	return (new);
 }
 
-static char	*read_and_store(int fd, char *store)
+static char	*read_and_append(int fd, char *store)
 {
 	char	*buf;
 	ssize_t	bytes;
@@ -93,17 +93,17 @@ static char	*read_and_store(int fd, char *store)
 	return (store);
 }
 
-static t_list	*find_current_fd(t_list **lst, int fd)
+static t_list	*get_fd_node(t_list **lst, int fd)
 {
 	t_list	*new;
-	t_list	*tmp;
+	t_list	*current;
 
-	tmp = *lst;
-	while (tmp)
+	current = *lst;
+	while (current)
 	{
-		if (tmp->fd == fd)
-			return (tmp);
-		tmp = tmp->next;
+		if (current->fd == fd)
+			return (current);
+		current = current->next;
 	}
 	new = (t_list *)malloc(sizeof(t_list));
 	if (!new)
@@ -123,17 +123,17 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	current = find_current_fd(&lst, fd);
+	current = get_fd_node(&lst, fd);
 	if (!current)
 		return (NULL);
-	current->store = read_and_store(fd, current->store);
+	current->store = read_and_append(fd, current->store);
 	if (!current->store)
 	{
 		free_current_fd(&lst, fd);
 		return (NULL);
 	}
-	line = get_line(current->store);
-	current->store = get_remain_str(current->store);
+	line = extract_line(current->store);
+	current->store = save_ramaining_str(current->store);
 	if (!current->store)
 		free_current_fd(&lst, fd);
 	return (line);

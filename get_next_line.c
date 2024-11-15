@@ -6,13 +6,13 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:21:58 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 21:16:15 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/15 21:29:50 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*get_line(char *s)
+static char	*extract_line(char *s)
 {
 	char	*line;
 	int		len;
@@ -36,7 +36,7 @@ static char	*get_line(char *s)
 	return (line);
 }
 
-static char	*get_remain_str(char *s)
+static char	*save_ramaining_str(char *s)
 {
 	char	*new;
 	size_t	i;
@@ -65,7 +65,7 @@ static char	*get_remain_str(char *s)
 	return (new);
 }
 
-static char	*read_and_store(int fd, char *store)
+static char	*read_and_append(int fd, char *store)
 {
 	char	*buf;
 	ssize_t	bytes;
@@ -100,10 +100,10 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	store = read_and_store(fd, store);
+	store = read_and_append(fd, store);
 	if (!store)
 		return (NULL);
-	line = get_line(store);
-	store = get_remain_str(store);
+	line = extract_line(store);
+	store = save_ramaining_str(store);
 	return (line);
 }
