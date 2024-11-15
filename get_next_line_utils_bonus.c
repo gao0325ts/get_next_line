@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:30:29 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 17:07:24 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/15 21:25:44 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,30 @@ char	*join_string(char *s1, char *s2)
 	joined[i] = '\0';
 	free(s1);
 	return (joined);
+}
+
+void	free_current_fd(t_list **lst, int fd)
+{
+	t_list	*current;
+	t_list	*prev;
+
+	if (!lst || !*lst)
+		return ;
+	current = *lst;
+	prev = NULL;
+	while (current)
+	{
+		if (current->fd == fd)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				*lst = current->next;
+			free(current->store);
+			free(current);
+			return ;
+		}
+		prev = current;
+		current = current->next;
+	}
 }

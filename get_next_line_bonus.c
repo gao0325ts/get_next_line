@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:28:29 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 21:22:35 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/15 21:25:39 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,32 +113,6 @@ static t_list	*find_current_fd(t_list **lst, int fd)
 	new->next = *lst;
 	*lst = new;
 	return (new);
-}
-
-void	free_current_fd(t_list **lst, int fd)
-{
-	t_list	*current;
-	t_list	*prev;
-
-	if (!lst || !*lst)
-		return ;
-	current = *lst;
-	prev = NULL;
-	while (current)
-	{
-		if (current->fd == fd)
-		{
-			if (prev)
-				prev->next = current->next;
-			else
-				*lst = current->next;
-			free(current->store);
-			free(current);
-			return ;
-		}
-		prev = current;
-		current = current->next;
-	}
 }
 
 char	*get_next_line(int fd)
