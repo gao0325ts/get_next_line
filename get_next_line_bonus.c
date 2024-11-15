@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:28:29 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 20:20:53 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/15 20:54:09 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	*get_remain_str(char *s)
 	i = 0;
 	while (s[i] && s[i] != '\n')
 		i++;
-	if (!s[i])
+	if (!s[i] || (s[i] == '\n' && !s[i + 1]))
 	{
 		free(s);
 		return (NULL);
