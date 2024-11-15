@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:28:29 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 21:31:47 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/15 21:35:25 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static char	*read_and_append(int fd, char *store)
 		if (bytes == 0)
 			break ;
 		store = join_string(store, buf);
-		if (ft_strchr(store, '\n'))
+		if (!store || ft_strchr(store, '\n'))
 			break ;
 	}
 	free(buf);
