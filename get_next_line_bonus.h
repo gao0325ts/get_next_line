@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:25:44 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 20:19:53 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/15 20:24:31 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@
 #  define BUFFER_SIZE 256
 # endif
 
+# include <stdlib.h>
+# include <unistd.h>
+
 typedef struct s_list
 {
 	int				fd;
 	char			*store;
 	struct s_list	*next;
 }					t_list;
-
-# include <stdlib.h>
-# include <unistd.h>
 
 char				*get_next_line(int fd);
 char				*join_string(char *s1, char *s2);
