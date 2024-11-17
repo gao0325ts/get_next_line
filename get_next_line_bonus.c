@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:28:29 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/18 02:33:57 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/18 02:38:21 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	*save_ramaining_str(char *str)
 		free(str);
 		return (NULL);
 	}
-	new = (char *)malloc(sizeof(char) * (ft_strlen(str) - i + 1));
+	new = (char *)malloc(sizeof(char) * (ft_strlen(str) - i));
 	if (!new)
 		return (NULL);
 	j = 0;
