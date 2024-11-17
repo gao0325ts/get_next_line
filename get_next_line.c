@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:21:58 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 21:35:06 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/18 02:33:54 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static char	*extract_line(char *s)
 {
 	char	*line;
-	int		len;
-	int		i;
+	size_t	len;
+	size_t	i;
 
 	len = 0;
 	while (s[len] && s[len] != '\n')

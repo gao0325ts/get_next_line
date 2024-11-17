@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:30:29 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/15 21:37:33 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/18 02:33:50 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_strchr(const char *s, int c)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (s[i])
@@ -41,7 +41,7 @@ size_t	ft_strlen(char *s)
 char	*ft_strdup(char *s)
 {
 	char	*new;
-	int		i;
+	size_t	i;
 
 	new = (char *)malloc(sizeof(char) * (ft_strlen(s) + 1));
 	if (!new)
@@ -59,8 +59,8 @@ char	*ft_strdup(char *s)
 char	*join_string(char *s1, char *s2)
 {
 	char	*joined;
-	int		i;
-	int		j;
+	size_t	i;
+	size_t	j;
 
 	if (!s1)
 		return (ft_strdup(s2));
