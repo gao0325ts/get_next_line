@@ -6,7 +6,7 @@
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:28:29 by stakada           #+#    #+#             */
-/*   Updated: 2024/11/18 02:38:21 by stakada          ###   ########.fr       */
+/*   Updated: 2024/11/18 03:34:56 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,5 @@ char	*get_next_line(int fd)
 	}
 	line = extract_line(current->store);
 	current->store = save_ramaining_str(current->store);
-	if (!current->store)
-		free_current_fd(&lst, fd);
 	return (line);
 }
