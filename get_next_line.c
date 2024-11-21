@@ -5,96 +5,105 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 18:50:30 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 17:26:57 by stakada          ###   ########.fr       */
+/*   Created: 2024/11/11 21:21:58 by stakada           #+#    #+#             */
+/*   Updated: 2024/11/18 02:39:00 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-ssize_t	find_nl(char *str)
+static char	*extract_line(char *s)
 {
-	ssize_t	i;
+	char	*line;
+	size_t	len;
+	size_t	i;
 
+	len = 0;
+	while (s[len] && s[len] != '\n')
+		len++;
+	if (!s[len])
+		return (ft_strdup(s));
+	line = (char *)malloc(sizeof(char) * (len + 2));
+	if (!line)
+		return (NULL);
 	i = 0;
-	while (str[i])
+	while (i <= len)
 	{
-		if (str[i] == '\n')
-			return (i);
+		line[i] = s[i];
 		i++;
 	}
-	return (-1);
+	line[i] = '\0';
+	return (line);
 }
 
-char	*join_read(char *store, char *buf)
+static char	*save_ramaining_str(char *s)
 {
-	char	*res;
-	size_t	store_len;
-	size_t	buf_len;
+	char	*new;
+	size_t	i;
+	size_t	j;
 
-	store_len = ft_strlen_gnl(store);
-	buf_len = ft_strlen_gnl(buf);
-	res = (char *)malloc(sizeof(char) * (store_len + buf_len + 1));
-	if (!res)
-		return (NULL);
-	if (store)
+	i = 0;
+	while (s[i] && s[i] != '\n')
+		i++;
+	if (!s[i] || (s[i] == '\n' && !s[i + 1]))
 	{
-		ft_strcpy_gnl(res, store);
-		free(store);
+		free(s);
+		return (NULL);
 	}
-	if (buf)
-		ft_strcpy_gnl(&res[store_len], buf);
-	return (res);
+	new = (char *)malloc(sizeof(char) * (ft_strlen(s) - i));
+	if (!new)
+		return (NULL);
+	j = 0;
+	while (s[i + 1])
+	{
+		new[j] = s[i + 1];
+		i++;
+		j++;
+	}
+	new[j] = '\0';
+	free(s);
+	return (new);
 }
 
-char	*divide_string(char **store)
+static char	*read_and_append(int fd, char *store)
 {
-	char	*output;
-	char	*new_store;
-	ssize_t	nl;
-	size_t	len;
+	char	*buf;
+	ssize_t	bytes;
 
-	nl = find_nl(*store);
-	if (nl == -1)
-		len = ft_strlen_gnl(*store);
-	else
-		len = nl + 1;
-	output = (char *)malloc(sizeof(char) * (len + 1));
-	if (!output)
-		return (NULL);
-	ft_strncpy_gnl(output, *store, len);
-	if (nl != -1)
-		new_store = ft_strdup_gnl(&(*store)[nl + 1]);
-	free(*store);
-	*store = NULL;
-	if (nl != -1)
-		*store = new_store;
-	return (output);
-}
-
-char	*get_next_line(int fd)
-{
-	static char	*store;
-	char		*buf;
-	ssize_t		bytes;
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
 		return (NULL);
 	while (1)
 	{
 		bytes = read(fd, buf, BUFFER_SIZE);
-		if (bytes <= 0)
-			break ;
+		if (bytes < 0)
+		{
+			free(buf);
+			free(store);
+			return (NULL);
+		}
 		buf[bytes] = '\0';
-		store = join_read(store, buf);
-		if (find_nl(store) >= 0)
+		if (bytes == 0)
+			break ;
+		store = join_string(store, buf);
+		if (!store || ft_strchr(store, '\n'))
 			break ;
 	}
 	free(buf);
-	if (bytes < 0 || !store || !*store)
-		return (free(store), store = NULL, NULL);
-	return (divide_string(&store));
+	return (store);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*store;
+	char		*line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	store = read_and_append(fd, store);
+	if (!store)
+		return (NULL);
+	line = extract_line(store);
+	store = save_ramaining_str(store);
+	return (line);
 }

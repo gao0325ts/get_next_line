@@ -5,44 +5,82 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 18:53:15 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 16:02:40 by stakada          ###   ########.fr       */
+/*   Created: 2024/11/13 17:57:05 by stakada           #+#    #+#             */
+/*   Updated: 2024/11/18 02:33:52 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen_gnl(char *s)
+char	*ft_strchr(const char *s, int c)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return ((char *)&s[i]);
+		i++;
+	}
+	if ((char)c == '\0')
+		return ((char *)&s[i]);
+	return (NULL);
+}
+
+size_t	ft_strlen(char *s)
 {
 	size_t	len;
 
 	len = 0;
-	while (s && s[len])
+	while (s[len])
 		len++;
 	return (len);
 }
 
-void	ft_strcpy_gnl(char *dst, char *src)
-{
-	while (*src)
-		*dst++ = *src++;
-	*dst = '\0';
-}
-
-void	ft_strncpy_gnl(char *dst, char *src, size_t n)
-{
-	while (n-- && *src)
-		*dst++ = *src++;
-	*dst = '\0';
-}
-
-char	*ft_strdup_gnl(char *src)
+char	*ft_strdup(char *s)
 {
 	char	*new;
+	size_t	i;
 
-	new = (char *)malloc(sizeof(char) * (ft_strlen_gnl(src) + 1));
+	new = (char *)malloc(sizeof(char) * (ft_strlen(s) + 1));
 	if (!new)
 		return (NULL);
-	ft_strcpy_gnl(new, src);
+	i = 0;
+	while (s[i])
+	{
+		new[i] = s[i];
+		i++;
+	}
+	new[i] = '\0';
 	return (new);
+}
+
+char	*join_string(char *s1, char *s2)
+{
+	char	*joined;
+	size_t	i;
+	size_t	j;
+
+	if (!s1)
+		return (ft_strdup(s2));
+	joined = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!joined)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		joined[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+	{
+		joined[i] = s2[j];
+		i++;
+		j++;
+	}
+	joined[i] = '\0';
+	free(s1);
+	return (joined);
 }

@@ -5,96 +5,134 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stakada <stakada@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/01 11:37:44 by stakada           #+#    #+#             */
-/*   Updated: 2024/06/01 18:42:11 by stakada          ###   ########.fr       */
+/*   Created: 2024/11/15 16:28:29 by stakada           #+#    #+#             */
+/*   Updated: 2024/11/18 03:34:56 by stakada          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-ssize_t	find_nl(char *str)
+static char	*extract_line(char *str)
 {
-	ssize_t	i;
+	char	*line;
+	size_t	len;
+	size_t	i;
 
+	len = 0;
+	while (str[len] && str[len] != '\n')
+		len++;
+	if (!str[len])
+		return (ft_strdup(str));
+	line = (char *)malloc(sizeof(char) * (len + 2));
+	if (!line)
+		return (NULL);
 	i = 0;
-	while (str[i])
+	while (i <= len)
 	{
-		if (str[i] == '\n')
-			return (i);
+		line[i] = str[i];
 		i++;
 	}
-	return (-1);
+	line[i] = '\0';
+	return (line);
 }
 
-char	*join_read(char *store, char *buf)
+static char	*save_ramaining_str(char *str)
 {
-	char	*res;
-	size_t	store_len;
-	size_t	buf_len;
+	char	*new;
+	size_t	i;
+	size_t	j;
 
-	store_len = ft_strlen_gnl(store);
-	buf_len = ft_strlen_gnl(buf);
-	res = (char *)malloc(sizeof(char) * (store_len + buf_len + 1));
-	if (!res)
-		return (NULL);
-	if (store)
+	i = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	if (!str[i] || (str[i] == '\n' && !str[i + 1]))
 	{
-		ft_strcpy_gnl(res, store);
-		free(store);
+		free(str);
+		return (NULL);
 	}
-	if (buf)
-		ft_strcpy_gnl(&res[store_len], buf);
-	return (res);
+	new = (char *)malloc(sizeof(char) * (ft_strlen(str) - i));
+	if (!new)
+		return (NULL);
+	j = 0;
+	while (str[i + 1])
+	{
+		new[j] = str[i + 1];
+		i++;
+		j++;
+	}
+	new[j] = '\0';
+	free(str);
+	return (new);
 }
 
-char	*divide_string(char **store)
+static char	*read_and_append(int fd, char *store)
 {
-	char	*output;
-	char	*new_store;
-	ssize_t	nl;
-	size_t	len;
+	char	*buf;
+	ssize_t	bytes;
 
-	nl = find_nl(*store);
-	if (nl == -1)
-		len = ft_strlen_gnl(*store);
-	else
-		len = nl + 1;
-	output = (char *)malloc(sizeof(char) * (len + 1));
-	if (!output)
-		return (NULL);
-	ft_strncpy_gnl(output, *store, len);
-	if (nl != -1)
-		new_store = ft_strdup_gnl(&(*store)[nl + 1]);
-	free(*store);
-	*store = NULL;
-	if (nl != -1)
-		*store = new_store;
-	return (output);
-}
-
-char	*get_next_line(int fd)
-{
-	static char	*store[OPEN_MAX];
-	char		*buf;
-	ssize_t		bytes;
-
-	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
-		return (NULL);
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
 		return (NULL);
 	while (1)
 	{
 		bytes = read(fd, buf, BUFFER_SIZE);
-		if (bytes <= 0)
-			break ;
+		if (bytes < 0)
+		{
+			free(buf);
+			free(store);
+			return (NULL);
+		}
 		buf[bytes] = '\0';
-		store[fd] = join_read(store[fd], buf);
-		if (find_nl(store[fd]) >= 0)
+		if (bytes == 0)
+			break ;
+		store = join_string(store, buf);
+		if (!store || ft_strchr(store, '\n'))
 			break ;
 	}
 	free(buf);
-	if (bytes < 0 || !store[fd] || !*store[fd])
-		return (free(store[fd]), store[fd] = NULL, NULL);
-	return (divide_string(&store[fd]));
+	return (store);
+}
+
+static t_list	*get_fd_node(t_list **lst, int fd)
+{
+	t_list	*new;
+	t_list	*current;
+
+	current = *lst;
+	while (current)
+	{
+		if (current->fd == fd)
+			return (current);
+		current = current->next;
+	}
+	new = (t_list *)malloc(sizeof(t_list));
+	if (!new)
+		return (NULL);
+	new->fd = fd;
+	new->store = NULL;
+	new->next = *lst;
+	*lst = new;
+	return (new);
+}
+
+char	*get_next_line(int fd)
+{
+	static t_list	*lst;
+	t_list			*current;
+	char			*line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	current = get_fd_node(&lst, fd);
+	if (!current)
+		return (NULL);
+	current->store = read_and_append(fd, current->store);
+	if (!current->store)
+	{
+		free_current_fd(&lst, fd);
+		return (NULL);
+	}
+	line = extract_line(current->store);
+	current->store = save_ramaining_str(current->store);
+	return (line);
 }
